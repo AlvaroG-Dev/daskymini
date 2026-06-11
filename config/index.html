@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasky Mini - Editor</title>
+    <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+    <header>
+        <h1>Dasky Mini</h1>
+        <nav>
+            <button id="btn-conectar-ble" class="btn-nav">Conectar Bluetooth</button>
+            <button id="btn-conectar-usb" class="btn-nav">Conectar USB</button>
+        </nav>
+        <span id="estado" class="estado desconectado">Desconectado</span>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <h3>Widgets</h3>
+            <div class="widgets-paleta">
+                <div class="widget-item" draggable="true" data-tipo="texto">
+                    <span class="icono-widget">Aa</span>
+                    <span>Texto</span>
+                </div>
+                <div class="widget-item" draggable="true" data-tipo="icono">
+                    <span class="icono-widget">☀️</span>
+                    <span>Icono</span>
+                </div>
+                <div class="widget-item" draggable="true" data-tipo="grafico">
+                    <span class="icono-widget">📈</span>
+                    <span>Gráfico</span>
+                </div>
+                <div class="widget-item" draggable="true" data-tipo="barra">
+                    <span class="icono-widget">▮</span>
+                    <span>Barra</span>
+                </div>
+            </div>
+
+            <h3>Variables</h3>
+            <div class="variables-lista">
+                <code>{hora}</code>
+                <code>{minutos}</code>
+                <code>{segundos}</code>
+                <code>{dia}</code>
+                <code>{mes}</code>
+                <code>{temp}</code>
+                <code>{humedad}</code>
+                <code>{bateria}</code>
+            </div>
+        </aside>
+
+        <section class="editor">
+            <div class="pantalla-preview" id="pantalla-preview">
+                <div class="pantalla-marco">
+                    <div class="pantalla-contenido" id="canvas">
+                        <!-- Widgets renderizados aquí -->
+                    </div>
+                </div>
+                <span class="pantalla-label">240 × 320</span>
+            </div>
+
+            <div class="propiedades" id="propiedades">
+                <h3>Propiedades</h3>
+                <p class="hint">Selecciona un widget para editar</p>
+                <div id="form-propiedades"></div>
+            </div>
+        </section>
+
+        <aside class="pantallas-lista">
+            <h3>Pantallas</h3>
+            <div id="lista-pantallas"></div>
+            <button id="btn-nueva-pantalla" class="btn-add">+ Nueva pantalla</button>
+            <button id="btn-guardar" class="btn-save">Guardar en dispositivo</button>
+        </aside>
+    </main>
+
+    <script src="../js/editor.js"></script>
+    <script src="../js/ble.js"></script>
+    <script src="../js/usb.js"></script>
+</body>
+</html>
