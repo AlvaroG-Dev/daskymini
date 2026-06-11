@@ -2,79 +2,102 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1a2e">
     <title>Dasky Mini - Editor</title>
     <link rel="stylesheet" href="../css/estilo.css">
 </head>
 <body>
+    <!-- Barra superior fija -->
     <header>
+        <button id="btn-menu" class="icon-btn" aria-label="Menú">☰</button>
         <h1>Dasky Mini</h1>
-        <nav>
-            <button id="btn-conectar-ble" class="btn-nav">Conectar Bluetooth</button>
-            <button id="btn-conectar-usb" class="btn-nav">Conectar USB</button>
-        </nav>
-        <span id="estado" class="estado desconectado">Desconectado</span>
+        <div class="estado" id="estado">⚫ Desconectado</div>
     </header>
 
+    <!-- Panel de conexión -->
+    <div class="conexion-bar">
+        <button id="btn-ble" class="chip">
+            <span class="chip-icon">📶</span> Bluetooth
+        </button>
+        <button id="btn-usb" class="chip">
+            <span class="chip-icon">🔌</span> USB
+        </button>
+    </div>
+
+    <!-- Contenido principal -->
     <main>
-        <aside class="sidebar">
-            <h3>Widgets</h3>
-            <div class="widgets-paleta">
-                <div class="widget-item" draggable="true" data-tipo="texto">
-                    <span class="icono-widget">Aa</span>
-                    <span>Texto</span>
-                </div>
-                <div class="widget-item" draggable="true" data-tipo="icono">
-                    <span class="icono-widget">☀️</span>
-                    <span>Icono</span>
-                </div>
-                <div class="widget-item" draggable="true" data-tipo="grafico">
-                    <span class="icono-widget">📈</span>
-                    <span>Gráfico</span>
-                </div>
-                <div class="widget-item" draggable="true" data-tipo="barra">
-                    <span class="icono-widget">▮</span>
-                    <span>Barra</span>
+        <!-- Carrusel de pantallas -->
+        <section class="pantallas-carousel" id="pantallas-carousel">
+            <div class="carousel-track" id="carousel-track">
+                <!-- Las pantallas se renderizan aquí -->
+            </div>
+            <div class="carousel-nav">
+                <button id="btn-prev" class="nav-arrow">‹</button>
+                <span class="carousel-dots" id="carousel-dots"></span>
+                <button id="btn-next" class="nav-arrow">›</button>
+            </div>
+            <button id="btn-add-pantalla" class="btn-add-pantalla">+</button>
+        </section>
+
+        <!-- Lienzo de la pantalla activa -->
+        <section class="canvas-container">
+            <div class="canvas-wrapper" id="canvas-wrapper">
+                <div class="canvas-grid" id="canvas-grid">
+                    <!-- Widgets aquí -->
                 </div>
             </div>
-
-            <h3>Variables</h3>
-            <div class="variables-lista">
-                <code>{hora}</code>
-                <code>{minutos}</code>
-                <code>{segundos}</code>
-                <code>{dia}</code>
-                <code>{mes}</code>
-                <code>{temp}</code>
-                <code>{humedad}</code>
-                <code>{bateria}</code>
-            </div>
-        </aside>
-
-        <section class="editor">
-            <div class="pantalla-preview" id="pantalla-preview">
-                <div class="pantalla-marco">
-                    <div class="pantalla-contenido" id="canvas">
-                        <!-- Widgets renderizados aquí -->
-                    </div>
-                </div>
-                <span class="pantalla-label">240 × 320</span>
-            </div>
-
-            <div class="propiedades" id="propiedades">
-                <h3>Propiedades</h3>
-                <p class="hint">Selecciona un widget para editar</p>
-                <div id="form-propiedades"></div>
+            <div class="canvas-info">
+                <span class="resolucion">240×320</span>
+                <span class="widgets-count" id="widgets-count">0 widgets</span>
             </div>
         </section>
 
-        <aside class="pantallas-lista">
-            <h3>Pantallas</h3>
-            <div id="lista-pantallas"></div>
-            <button id="btn-nueva-pantalla" class="btn-add">+ Nueva pantalla</button>
-            <button id="btn-guardar" class="btn-save">Guardar en dispositivo</button>
-        </aside>
+        <!-- Barra de herramientas inferior -->
+        <div class="toolbar" id="toolbar">
+            <button class="tool-btn" data-action="add-texto">
+                <span class="tool-icon">Aa</span>
+                <span class="tool-label">Texto</span>
+            </button>
+            <button class="tool-btn" data-action="add-icono">
+                <span class="tool-icon">☀️</span>
+                <span class="tool-label">Icono</span>
+            </button>
+            <button class="tool-btn" data-action="add-grafico">
+                <span class="tool-icon">📈</span>
+                <span class="tool-label">Gráfico</span>
+            </button>
+            <button class="tool-btn" data-action="add-barra">
+                <span class="tool-icon">▮</span>
+                <span class="tool-label">Barra</span>
+            </button>
+            <button class="tool-btn" data-action="guardar" id="btn-guardar">
+                <span class="tool-icon">💾</span>
+                <span class="tool-label">Guardar</span>
+            </button>
+        </div>
     </main>
+
+    <!-- Modal de edición de widget -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal-editor">
+            <div class="modal-header">
+                <h2 id="modal-titulo">Editar Widget</h2>
+                <button class="modal-close" id="modal-close">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Formulario dinámico -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-danger" id="btn-eliminar">Eliminar</button>
+                <button class="btn-primary" id="btn-ok">Listo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de notificaciones -->
+    <div class="toast" id="toast"></div>
 
     <script src="../js/editor.js"></script>
     <script src="../js/ble.js"></script>
