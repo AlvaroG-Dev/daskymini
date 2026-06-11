@@ -448,3 +448,45 @@ header {
     display: block;
     border-radius: 14px;
 }
+
+.badge-añadida {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 10px;
+    background: #1a3a2a;
+    color: #3fb950;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+}
+
+.empty-state p {
+    margin-top: 16px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.empty-state span {
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.galeria-preview canvas,
+.pantalla-thumb canvas,
+.preview-screen canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.preview-screen {
+    border-radius: 16px;
+    overflow: hidden;
+}
