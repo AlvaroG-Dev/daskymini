@@ -1,6 +1,8 @@
-document.getElementById('btn-ble')?.addEventListener('click', async () => {
+document.getElementById('estado')?.addEventListener('click', async () => {
+    if (state.conectado) return;
+    
     if (!('bluetooth' in navigator)) {
-        showToast('Bluetooth no soportado en este navegador');
+        showToast('Bluetooth no disponible en este navegador');
         return;
     }
     
@@ -15,37 +17,24 @@ document.getElementById('btn-ble')?.addEventListener('click', async () => {
         const caracteristica = await servicio.getCharacteristic('0000a001-0000-1000-8000-00805f9b34fb');
         
         state.conectado = true;
-        state.modo = 'ble';
-        document.getElementById('estado').className = 'estado conectado';
-        document.getElementById('estado').textContent = '📶 Bluetooth';
-        showToast('Conectado por Bluetooth');
+        document.getElementById('estado').classList.add('conectado');
+        document.getElementById('estado').innerHTML = '<span class="estado-dot"></span> Bluetooth';
         
-        window._enviarBLE = async (json) => {
+        window._enviarDispositivo = async (json) => {
             const encoder = new TextEncoder();
-            // Enviar en chunks si es muy grande
             const data = encoder.encode(json);
-            const CHUNK_SIZE = 200;
-            for (let i = 0; i < data.length; i += CHUNK_SIZE) {
-                await caracteristica.writeValue(data.slice(i, i + CHUNK_SIZE));
+            const CHUNK = 200;
+            for (let i = 0; i < data.length; i += CHUNK) {
+                await caracteristica.writeValue(data.slice(i, i + CHUNK));
             }
             showToast('Guardado en Dasky Mini ✓');
         };
         
-        // Leer configuración actual
-        const valor = await caracteristica.readValue();
-        if (valor && valor.byteLength > 0) {
-            const json = new TextDecoder().decode(valor);
-            try {
-                const config = JSON.parse(json);
-                state.pantallas = config.pantallas || [];
-                renderTodo();
-                showToast('Configuración cargada');
-            } catch(e) {}
-        }
+        showToast('Conectado por Bluetooth ✓');
         
     } catch (error) {
-        console.error('Error BLE:', error);
-        if (error.message.includes('User cancelled')) return;
-        showToast('Error al conectar Bluetooth');
+        if (!error.message.includes('cancelled')) {
+            showToast('Error de conexión');
+        }
     }
 });
