@@ -408,3 +408,43 @@ header {
     background: var(--border);
     border-radius: 2px;
 }
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+}
+
+.empty-state p {
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.empty-state .sub {
+    font-size: 12px;
+    margin-top: 4px;
+    opacity: 0.6;
+}
+
+/* Galería cards mejoradas */
+.galeria-preview canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Thumbnails en mis pantallas */
+.pantalla-thumb canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+}
+
+/* Preview modal screen */
+.preview-screen canvas {
+    display: block;
+    border-radius: 14px;
+}
