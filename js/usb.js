@@ -1,6 +1,8 @@
-document.getElementById('btn-usb')?.addEventListener('click', async () => {
+// Doble tap en estado para conectar USB
+let usbTapTimer;
+document.getElementById('estado')?.addEventListener('dblclick', async () => {
     if (!('serial' in navigator)) {
-        showToast('USB no soportado. Usa Chrome o Edge.');
+        showToast('USB solo en Chrome/Edge');
         return;
     }
     
@@ -9,47 +11,21 @@ document.getElementById('btn-usb')?.addEventListener('click', async () => {
         await puerto.open({ baudRate: 115200 });
         
         state.conectado = true;
-        state.modo = 'usb';
-        document.getElementById('estado').className = 'estado conectado';
-        document.getElementById('estado').textContent = '🔌 USB';
-        showToast('Conectado por USB');
+        document.getElementById('estado').classList.add('conectado');
+        document.getElementById('estado').innerHTML = '<span class="estado-dot"></span> USB';
         
-        window._enviarUSB = async (json) => {
+        window._enviarDispositivo = async (json) => {
             const writer = puerto.writable.getWriter();
-            const encoder = new TextEncoder();
-            await writer.write(encoder.encode(json + '\n'));
+            await writer.write(new TextEncoder().encode(json + '\n'));
             writer.releaseLock();
             showToast('Guardado en Dasky Mini ✓');
         };
         
-        // Leer configuración actual
-        const reader = puerto.readable.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-        setTimeout(async () => {
-            try {
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    buffer += decoder.decode(value);
-                    if (buffer.includes('\n')) {
-                        const json = buffer.split('\n')[0];
-                        try {
-                            const config = JSON.parse(json);
-                            state.pantallas = config.pantallas || [];
-                            renderTodo();
-                            showToast('Configuración cargada');
-                        } catch(e) {}
-                        break;
-                    }
-                }
-            } catch(e) {}
-            reader.releaseLock();
-        }, 500);
+        showToast('Conectado por USB ✓');
         
     } catch (error) {
-        console.error('Error USB:', error);
-        if (error.message.includes('cancelled')) return;
-        showToast('Error al conectar USB');
+        if (!error.message.includes('cancelled')) {
+            showToast('Error de conexión USB');
+        }
     }
 });
